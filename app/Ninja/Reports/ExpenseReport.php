@@ -13,6 +13,8 @@ class ExpenseReport extends AbstractReport
     public function getColumns()
     {
         $columns = [
+            ############### Added expense_id as a column on front end report
+            'expense_id' => [],
             'vendor' => [],
             'client' => [],
             'date' => [],
@@ -72,7 +74,8 @@ class ExpenseReport extends AbstractReport
             foreach ($expenses->get() as $expense) {
                 foreach ($expense->documents as $document) {
                     $expenseId = str_pad($expense->public_id, $account->invoice_number_padding, '0', STR_PAD_LEFT);
-                    $name = sprintf('%s_%s_%s_%s', $expense->expense_date ?: date('Y-m-d'), trans('texts.expense'), $expenseId, $document->name);
+                    #### Changed the naming for zip file to match the order for expense report so as to make it easily identifiable
+                    $name = sprintf('%s_%s_%s_%s_%s',trans('texts.expense'), $expenseId, $expense->vendor->name, $expense->expense_date ?: date('Y-m-d'), $document->name);
                     $name = str_replace(' ', '_', $name);
                     $zip->add_file($name, $document->getRaw());
                 }
@@ -85,6 +88,8 @@ class ExpenseReport extends AbstractReport
             $amount = $expense->amountWithTax();
 
             $row = [
+                ############ Added expense id in line below to be shown on the front end.
+                $expense->public_id,
                 $expense->vendor ? ($this->isExport ? $expense->vendor->name : $expense->vendor->present()->link) : '',
                 $expense->client ? ($this->isExport ? $expense->client->getDisplayName() : $expense->client->present()->link) : '',
                 $this->isExport ? $expense->present()->expense_date : link_to($expense->present()->url, $expense->present()->expense_date),
