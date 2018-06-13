@@ -2840,6 +2840,9 @@ $LANG = array(
     'gateway_fee_item' => 'Gateway Fee Item',
     'gateway_fee_description' => 'Gateway Fee Surcharge',
 
+	##############CUSTOM LABELS##################
+    'expense_id' => 'Expense ID',
+	
 );
 
 return $LANG;
